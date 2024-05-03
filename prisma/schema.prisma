@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [pgcrypto]
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  userName      String?   @unique
+  email         String    @unique
+  phoneNumber   String?   @unique
+  password      String
+  role          UserRole  @default(ADMIN)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  tweets        Tweet[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model Tweet {
+  id            String      @id @default(cuid())
+  type          TweetType?  @unique
+  content       String?     @unique
+  userId        String     
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum TweetType {
+  TEXT
+  IMAGE
+  VIDEO
+}

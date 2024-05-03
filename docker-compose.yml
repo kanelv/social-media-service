@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  social-media-service_db:
+    image: postgres:15.4-alpine3.18
+    environment:
+      POSTGRES_DB: social-media-service_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+      - ./docker/postgres/data:/var/lib/postgresql/data
+  # localstack:
+  #   image: localstack/localstack:1.4
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=dummy
+  #     - AWS_SECRET_ACCESS_KEY=dummy
+  #     - DEFAULT_REGION=ap-northeast-1
+  #     - SERVICES=s3,dynamodb
+  #   ports:
+  #     - "4566:4566"
+  #   volumes:
+  #     - ./aws:/etc/localstack/init/ready.d
+  #   healthcheck:
+  #     test: curl -s localhost:4566 | grep running > /dev/null || exit 1
+  #     interval: 5s
+  #     timeout: 3s
