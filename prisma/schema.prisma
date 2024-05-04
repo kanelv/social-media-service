@@ -22,8 +22,8 @@ generator docs {
 model User {
   id            String    @id @default(cuid())
   userName      String?   @unique
-  email         String    @unique
-  phoneNumber   String?   @unique
+  email         String?   @unique
+  phoneNumber   String    @unique
   password      String
   role          UserRole  @default(ADMIN)
   createdAt     DateTime  @default(now())
@@ -38,8 +38,8 @@ enum UserRole {
 
 model Tweet {
   id            String      @id @default(cuid())
-  type          TweetType?  @unique
-  content       String?     @unique
+  type          TweetType?
+  content       String?
   userId        String     
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
